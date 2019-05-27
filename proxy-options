@@ -17,19 +17,16 @@ function parse_url() {
 # Check for proxy options and echo if enabled.
 function proxy_options() {
 
-  if [ -z "$UNSET_PROXY" ]
+  if [ "$UNSET_PROXY" == "true" ]
   then
-    if [ "$UNSET_PROXY" == "true" ]
-    then
-      unset http_proxy
-      unset https_proxy
-      unset HTTP_PROXY
-      unset HTTPS_PROXY
-      unset no_proxy
-      unset NO_PROXY
-    fi
+    unset http_proxy
+    unset https_proxy
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+    unset no_proxy
+    unset NO_PROXY
   fi
-  
+
   local ret=""
   ret="$(java_proxy_options "${https_proxy:-${HTTPS_PROXY}}" https)"
   ret="$ret $(java_proxy_options "${http_proxy:-${HTTP_PROXY}}" http)"
