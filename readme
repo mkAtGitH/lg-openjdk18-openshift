@@ -1,0 +1,17 @@
+
+ This is docker image based on redhat-openjdk18-openshift-noproxy
+
+ Addition
+    UNSET_PROXY
+    runSql.sh
+
+
+
+ UNSET_PROXY
+ If proxy is configured, the settings were automatically transferred to java as
+    java arguments. With new option UNSET_PROXY (default=True), image behaves
+    as if the proxy is not configured at all.
+
+ runSql.sh
+ Simple java tool for testing DB connectivity using plain JDBC queries.
+ Look in /opt/runSql
