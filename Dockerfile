@@ -10,16 +10,16 @@ COPY ./proxy-options /opt/run-java/proxy-options
 
 # CERTIFICATES
 USER root
+COPY ./LG-TLSServer-CA-G1.pem /opt
+COPY ./LibertyGlobalEnterprise-Root-CA-G1.pem /opt
 # add LG certificates to a system wide trusted CAs
-RUN echo "" >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-RUN echo "# LG CA certificates" >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-RUN echo "" >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-RUN echo "# LG-TLSServer-CA-G1" >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-RUN echo "# LibertyGlobalEnterprise-Root-CA-G1" >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-RUN cat ./LG-TLSServer-CA-G1.pem >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-RUN cat ./LibertyGlobalEnterprise-Root-CA-G1.pem >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+RUN echo -e "\n# LG CA certificates\n\n# LG-TLSServer-CA-G1\n# LibertyGlobalEnterprise-Root-CA-G1" >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+RUN cat /opt/LG-TLSServer-CA-G1.pem >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+RUN cat /opt/LibertyGlobalEnterprise-Root-CA-G1.pem >> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 
 # add it to jdk
-RUN keytool -import -keystore /usr/lib/jvm/jre/lib/security/cacerts -storepass changeit -trustcacerts -noprompt -file ./LG-TLSServer-CA-G1.pem -alias LG-TLSServer-CA-G1 
-RUN keytool -import -keystore /usr/lib/jvm/jre/lib/security/cacerts -storepass changeit -trustcacerts -noprompt -file ./LibertyGlobalEnterprise-Root-CA-G1.pem -alias LibertyGlobalEnterprise-Root-CA-G1
+RUN keytool -import -keystore /usr/lib/jvm/jre/lib/security/cacerts -storepass changeit -trustcacerts -noprompt -file /opt/LG-TLSServer-CA-G1.pem -alias LG-TLSServer-CA-G1 
+RUN keytool -import -keystore /usr/lib/jvm/jre/lib/security/cacerts -storepass changeit -trustcacerts -noprompt -file /opt/LibertyGlobalEnterprise-Root-CA-G1.pem -alias LibertyGlobalEnterprise-Root-CA-G1
+
+RUN rm /opt/*.pem
 USER 1001
